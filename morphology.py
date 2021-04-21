@@ -1,7 +1,9 @@
 import numpy as np
 import cv2 as cv2
+from PIL import Image
 #Reading the image
 img = cv2.imread('noise.jpg',0)
+
 kernel=np.ones((3,3))
 ####Erosion function####
 def erosion(image,kernel):
@@ -63,6 +65,9 @@ img_noise2=dilation(img_noise2,kernel)
 
 img_bound2=erosion(img_noise2,kernel)
 img_bound2=img_noise2-img_bound2
-cv2.imwrite('boundary.png',img_bound2)
+cv2.imwrite('boundary1.png',img_bound2)
+
+boundary = Image.open('boundary1.png')
+boundary.show()
 
 

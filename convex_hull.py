@@ -57,10 +57,13 @@ vertices = hull.points[hull.vertices]
 mask = grid_points_in_poly(image.shape, vertices)
 mask_data = im.fromarray(mask)
 mask_data.save('mask.png')
+mask = im.open("mask.png")
+mask.show()
 chull_diff = img_as_float(mask.copy())
 chull_diff[image] = 2
 chull_data = im.fromarray(chull_diff)
 chull_data = chull_data.convert('L')
 chull_im = ImageEnhance.Brightness(chull_data)
 chull_im.enhance(150).save('final.png')
-
+final = im.open("final.png")
+final.show()
