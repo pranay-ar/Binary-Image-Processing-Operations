@@ -1,7 +1,6 @@
 import tkinter as tk
 import tkinter.font as tkFont
 from PIL import Image
-from scipy.spatial import ConvexHull
 from skimage import data,img_as_float
 from skimage.util import invert
 import numpy as np
@@ -12,6 +11,9 @@ import cv2 as cv2
 from skimage import measure
 from skimage import filters
 import matplotlib.pyplot as plt
+
+# Libraries are used only for reading, displaying and for primary purposes of the image.
+# The main Processing functions are written without any in-built functions.
 
 class App:
     def __init__(self, root):
@@ -62,7 +64,7 @@ class App:
         GRadio_850["font"] = ft
         GRadio_850["fg"] = "#333333"
         GRadio_850["justify"] = "center"
-        GRadio_850["text"] = "Original Image"
+        GRadio_850["text"] = "Original Images"
         GRadio_850.place(x=240,y=160,width=144,height=57)
         GRadio_850["command"] = self.GRadio_850_command
 
@@ -94,7 +96,7 @@ class App:
 
     def GRadio_989_command(self):
         #Reading the image
-        img = cv2.imread('regionfilling.png',0)
+        img = cv2.imread('Region Filling/regionfilling.png',0)
         kernel=np.ones((3,3))
 
         #Dilation Function
@@ -149,12 +151,15 @@ class App:
         img_noise1=erosion(img_noise1,kernel)
 
 
-        cv2.imwrite('filling1.jpg',img)
-        fill=Image.open("filling1.jpg")
+        cv2.imwrite('Region Filling/filling1.jpg',img)
+        fill=Image.open("Region Filling/filling1.jpg")
         fill.show()
+        collage=Image.open("Region Filling/regionfilling_collage.png")
+        collage.show()
 
 
     def GRadio_27_command(self):
+        from scipy.spatial import ConvexHull
         image=invert(data.horse())
         n =np.ascontiguousarray(image, dtype=np.uint8)
         rows,cols=n.shape
@@ -205,17 +210,19 @@ class App:
         vertices = hull.points[hull.vertices]
         mask = grid_points_in_poly(image.shape, vertices)
         mask_data = im.fromarray(mask)
-        mask_data.save('mask.png')
-        mask = im.open("mask.png")
+        mask_data.save('Convex Hull/mask1.png')
+        mask = im.open("Convex Hull/mask1.png")
         mask.show()
         chull_diff = img_as_float(mask.copy())
         chull_diff[image] = 2
         chull_data = im.fromarray(chull_diff)
         chull_data = chull_data.convert('L')
         chull_im = ImageEnhance.Brightness(chull_data)
-        chull_im.enhance(150).save('final.png')
-        final = im.open("final.png")
+        chull_im.enhance(150).save('Convex Hull/final1.png')
+        final = im.open("Convex Hull/final1.png")
         final.show()
+        collage=Image.open("Convex Hull/convexhull_collage.png")
+        collage.show()
 
 
     def GRadio_589_command(self):
@@ -247,12 +254,12 @@ class App:
 
 
     def GRadio_850_command(self):
-        org_img = Image.open("image.jpg")
+        org_img = Image.open("image.png")
         org_img.show()
 
 
     def GRadio_602_command(self):
-        img = cv2.imread('noise.jpg',0)
+        img = cv2.imread('Boundary Extraction/noise.jpg',0)
 
         kernel=np.ones((3,3))
         ####Erosion function####
@@ -315,10 +322,13 @@ class App:
 
         img_bound2=erosion(img_noise2,kernel)
         img_bound2=img_noise2-img_bound2
-        cv2.imwrite('boundary1.png',img_bound2)
+        cv2.imwrite('Boundary Extraction/boundary1.png',img_bound2)
 
-        boundary = Image.open('boundary1.png')
+        boundary = Image.open('Boundary Extraction/boundary1.png')
         boundary.show()
+        collage = Image.open('Boundary Extraction/boundary_collage.png')
+        collage.show()
+
 
 if __name__ == "__main__":
     root = tk.Tk()
